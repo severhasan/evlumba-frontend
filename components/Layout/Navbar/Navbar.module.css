@@ -1,0 +1,19 @@
+.Navbar {
+    color: rgba(3, 102, 53, 1);
+    height: 3rem;
+    border-bottom: 1px solid grey;
+}
+.Logo {
+    float: left;
+    position: relative;
+}
+.Logo img {
+    position: absolute;
+    top: -20px;
+}
+.UserMenu {
+    float: right;
+    cursor: pointer;
+    line-height: 3rem;
+    vertical-align: middle;
+}
