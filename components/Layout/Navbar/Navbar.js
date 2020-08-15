@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Navbar.module.css';
+// import Logo from '../../../public/evlumbaalogo.png';
 
 const Navbar = () => {
 
@@ -7,7 +8,7 @@ const Navbar = () => {
         <div className={classes.Navbar}>
             <div className='container'>
                 <div className={classes.Logo}>
-                    <img src='./evlumbaalogo.png' />
+                    <img src='/evlumbaalogo.png' />
                 </div>
                 <div className={classes.UserMenu}>
                     <span>Giriş Yap</span>

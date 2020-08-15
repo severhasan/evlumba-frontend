@@ -1,0 +1,60 @@
+.Wrapper {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.Header {
+    height: 120px;
+}
+
+.SearchContainer {
+    display: flex;
+    justify-content: center;
+}
+.SearchContainer input {
+    border: 1px solid #bbb;
+    border-radius: 20px;
+    padding: 0 10px;
+    min-width: 300px;
+    margin-left: 20px;
+}
+
+.Sidebar {
+    border-right: 1px solid #ccc;
+}
+.Body {
+    height: 100%;
+}
+.Shadow {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.25);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.ProductSearch {
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 3;
+    background-color: white;
+    width: 80vw;
+    height: 600px;
+    border-radius: 5px;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.ConfirmBtn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
