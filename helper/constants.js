@@ -1,4 +1,5 @@
-MAX_IMAGE_SIZE = 2097152;
+exports.MAX_IMAGE_SIZE = 2097152;
+exports.DEFAULT_SELECT_VALUE = 'choose an option';
 
 exports.SPACES = [
     "mutfak",

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import classes from './Create.module.css';
-import { CATEGORIES, SPACES, MAX_IMAGE_SIZE } from '../../helper/constants';
-import { capitalizeEachWord } from '../../helper/functions';
+import { CATEGORIES, SPACES, MAX_IMAGE_SIZE, DEFAULT_SELECT_VALUE } from '../../helper/constants';
+import { capitalizeEachWord, getNameWithoutExtention } from '../../helper/functions';
 
 import ProductSearch from './ProductSearch/ProductSearch';
 import Tag from './Tag/Tag';
@@ -26,10 +26,11 @@ const CreateDesign = () => {
     const [file, setFile] = useState([]);
     const [imageData, setImageData] = useState("");
     const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/*',
+        // accept: 'image/*',
+        accept: 'image/jpeg',
         onDrop: acceptedFiles => {
             const reader = new FileReader();
-            
+
             reader.onload = e => {
                 if (!e.target.result.includes('data:image/jpeg')) {
                     return alert('Wrong file type - JPG only.')
@@ -104,20 +105,19 @@ const CreateDesign = () => {
             category,
             products,
             description
-        }
+        };
 
-        const response = await axios.get("getPresignedURL");
-        console.log(response.data.uploadURL);
-        console.log(imageData)
-        let binary = atob(imageData.split(',')[1])
-        let array = []
+        const queryString = `?model=design&name=${getNameWithoutExtention(file.name)}`;
+        const response = await axios.get(`URL${queryString}`);
+        console.log('response:', response.data);
+        let binary = atob(imageData.split(',')[1]);
+        let array = [];
         for (var i = 0; i < binary.length; i++) {
-          array.push(binary.charCodeAt(i))
+            array.push(binary.charCodeAt(i));
         }
-        let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
-        console.log(blobData)
-        const result = await axios.put(response.data.uploadURL, blobData);
-        // console.log('Result: ', result)
+        let blobData = new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+        const result = await axios.put(response.data.uploadURL, blobData, { headers: { 'Content-Type': 'image/jpeg', ACL: 'public-read' } });
+        console.log('Result: ', result)
     }
 
     const updateSpace = space => {
@@ -143,8 +143,8 @@ const CreateDesign = () => {
                     <div className="form-group">
                         <label htmlFor="category">Yaşam Alanı</label>
                         {/* <input name='category' type="text" className="form-control" id="category" /> */}
-                        <select onChange={e => updateSpace(e.target.value)} className="form-control">
-                            <option selected disabled>Bir yaşam alanı seçin</option>
+                        <select defaultValue={DEFAULT_SELECT_VALUE} onChange={e => updateSpace(e.target.value)} className="form-control">
+                            <option value={DEFAULT_SELECT_VALUE} disabled >Bir yaşam alanı seçin</option>
                             {SPACES.map((o, idx) => <option key={`space-${idx}`} value={o} >{capitalizeEachWord(o)}</option>)}
                         </select>
                     </div>
@@ -153,8 +153,8 @@ const CreateDesign = () => {
                             ? <div className="form-group">
                                 <label htmlFor="subcategory">Alt Kategori</label>
                                 {/* <input name='subCategory' type="text" className="form-control" id="subcategory" /> */}
-                                <select onChange={e => setCategory(e.target.value)} className="form-control">
-                                    <option selected disabled>Bir kategori seçin</option>
+                                <select defaultValue={DEFAULT_SELECT_VALUE} onChange={e => setCategory(e.target.value)} className="form-control">
+                                    <option value={DEFAULT_SELECT_VALUE} disabled>Bir kategori seçin</option>
                                     {categoryOptions.map((c, idx) => <option key={`category-${idx}`} value={c} >{capitalizeEachWord(c)}</option>)}
                                 </select>
                             </div>
