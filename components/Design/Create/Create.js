@@ -1,14 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import gql from 'graphql-tag';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { useDropzone } from 'react-dropzone';
 import classes from './Create.module.css';
-import { CATEGORIES, SPACES, MAX_IMAGE_SIZE, DEFAULT_SELECT_VALUE } from '../../helper/constants';
-import { capitalizeEachWord, getNameWithoutExtention } from '../../helper/functions';
+import { CATEGORIES, SPACES, MAX_IMAGE_SIZE, DEFAULT_SELECT_VALUE } from '../../../helper/constants';
+import { capitalizeEachWord, getNameWithoutExtention } from '../../../helper/functions';
 
-import ProductSearch from './ProductSearch/ProductSearch';
-import Tag from './Tag/Tag';
+import ProductSearch from '../ProductSearch/ProductSearch';
+import Tag from '../Tag/Tag';
+
+const PRESIGNEDURL = gql`
+    query PresignedURL($model: String!, $name: String!) {
+        presignedurl(model: $model, name: $name) {
+            uploadURL,
+            filename
+        }
+    }
+`;
+
+const CREATEDESIGN = gql`
+    mutation CreateDesign($design: DesignInput) {
+        createDesign(design: $design) {
+            title
+        }
+    }
+`;
 
 const CreateDesign = () => {
+    const [creating, setCreating] = useState(false);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState("");
     const [currentClickPos, setCurrentClickPos] = useState({ tagX: 0, tagY: 0 });
@@ -20,11 +40,14 @@ const CreateDesign = () => {
     const [space, setSpace] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
-
     const [categoryOptions, setCategoryOptions] = useState(null);
-
     const [file, setFile] = useState([]);
     const [imageData, setImageData] = useState("");
+
+    const [presignedURL, setPresignedURL] = useState("");
+    const [getSignedURL, { loading: loadingSignedURL, data: URLData }] = useLazyQuery(PRESIGNEDURL);
+    const [createDesign, { data: newDesignData }] = useMutation(CREATEDESIGN);
+
     const { getRootProps, getInputProps } = useDropzone({
         // accept: 'image/*',
         accept: 'image/jpeg',
@@ -92,32 +115,53 @@ const CreateDesign = () => {
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
         // files.forEach(file => URL.revokeObjectURL(file.preview));
-        URL.revokeObjectURL(file.preview)
+        URL.revokeObjectURL(file.preview);
 
     }, [file, products]);
 
-    const onSubmit = async event => {
-        event.preventDefault();
+
+    const uploadAndCreateDesign = async () => {
         const design = {
             title,
             subtitle,
             space,
             category,
             products,
-            description
+            description,
+            image: presignedURL.filename
         };
 
-        const queryString = `?model=design&name=${getNameWithoutExtention(file.name)}`;
-        const response = await axios.get(`URL${queryString}`);
-        console.log('response:', response.data);
+        console.log(design);
+
+        // PROCESS IMAGEDATA IN BINARY
         let binary = atob(imageData.split(',')[1]);
         let array = [];
         for (var i = 0; i < binary.length; i++) {
             array.push(binary.charCodeAt(i));
         }
         let blobData = new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
-        const result = await axios.put(response.data.uploadURL, blobData, { headers: { 'Content-Type': 'image/jpeg', ACL: 'public-read' } });
-        console.log('Result: ', result)
+
+        // UPLOAD TO S3;
+        const response = await axios.put(presignedURL.uploadURL, blobData, { headers: { 'Content-Type': 'image/jpeg', ACL: 'public-read' } });
+        if (response.status !== 200) return alert('unable to upload the image');
+
+        createDesign({ variables: { design } });
+        console.log(await newDesignData);
+    }
+
+    if (URLData && URLData.presignedurl && !presignedURL) {
+        setPresignedURL(URLData.presignedurl);
+        console.log(URLData.presignedurl)
+        setCreating(true);
+    }
+    if (creating) {
+        uploadAndCreateDesign();
+        setCreating(false);
+    }
+
+    const onSubmit = async event => {
+        event.preventDefault();
+        if (!imageData) return alert('no image set');
     }
 
     const updateSpace = space => {
@@ -161,7 +205,6 @@ const CreateDesign = () => {
                             : null
                     }
 
-
                     <div className={classes.Preview}>
                         <section className={classes.Container}>
                             <div {...getRootProps({ className: classes.Dropzone })}>
@@ -181,8 +224,13 @@ const CreateDesign = () => {
                         <label htmlFor="description">Açıklama</label>
                         <textarea onChange={e => setDescription(e.target.value)} name='description' className="form-control" id="description" rows="3"></textarea>
                     </div>
-                    <button id='submitDesign' type="submit" className="btn btn-primary">Gönder</button>
+                    {/* <button id='submitDesign' type="submit" className="btn btn-primary">Gönder</button> */}
                 </form>
+                <button onClick={() => getSignedURL({
+                        variables: { model: 'design', name: getNameWithoutExtention(file.name) }
+                    })} id='submitDesign' type="submit" className="btn btn-primary">
+                        Gönder
+                </button>
             </div>
             {
                 productSearchActive ?
