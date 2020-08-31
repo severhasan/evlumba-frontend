@@ -6,7 +6,8 @@ import { createHttpLink } from 'apollo-link-http';
 // import { getDataFromTree } from '@apollo/react-ssr';
 import Layout from '../containers/Layout/Layout';
 import App from 'next/app';
-// import './main.css';
+import '../public/css/App.css';
+
 
 const link = createHttpLink({
     uri: 'http://localhost:3000/api/graphql'

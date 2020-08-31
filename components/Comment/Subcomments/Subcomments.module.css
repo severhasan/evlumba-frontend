@@ -1,0 +1,20 @@
+.Container {
+    display: flex;
+}
+
+.SubcommentsMargin {
+    width: 40px;
+    margin-top: 10px;
+}
+
+.Icon {
+    font-size: 2rem !important;   
+    color: #403B38;
+}
+.Subcomments {
+    margin-top: 10px;
+    width: 100%;
+}
+.Subcomment {
+    margin-bottom: 10px;
+}

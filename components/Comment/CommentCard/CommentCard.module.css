@@ -1,0 +1,22 @@
+.CommentCard {
+    position: relative;
+    border: 1px solid #E5E5E5;
+    border-radius: 5px;
+    padding: 5px;
+    display: inline-block;
+    width: 90%;
+}
+
+.Title {
+    font-weight: 600px;
+}
+
+.Content {
+    margin-top: 10px;
+}
+
+.Likes {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

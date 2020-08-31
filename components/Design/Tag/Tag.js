@@ -5,12 +5,12 @@ const Tag = props => {
     const {x, y} = props;
     const style = {
         position: 'absolute',
-        left: x,
-        top: y,
+        left: `${x * 100}%`,
+        top: `${y * 100}%`,
     }
     return (
         <div style={style} className={classes.Tag}>
-            <img src='/tag.svg' />
+            <img src='/image/tag.svg' />
         </div>
     )
 }

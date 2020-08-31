@@ -1,0 +1,19 @@
+.DesignDetail {
+    position: relative;
+    padding: 5px 0 20px;
+}
+
+.Icons {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    display: flex;
+}
+
+.Title {
+    font-size: 32px;
+}
+
+.Description {
+    margin-top: 40px;
+}

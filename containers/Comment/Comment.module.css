@@ -1,0 +1,19 @@
+.Container {
+    display: flex;
+}
+
+.LeftMargin {
+    width: 60px;
+}
+
+.Icon {
+    /* width: 50px !important;
+    height: 30px;
+    float: left; */
+    font-size: 2rem !important;
+    color: #403B38;
+}
+
+.Comments {
+    width: 100%;
+}

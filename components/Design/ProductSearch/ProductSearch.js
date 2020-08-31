@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classes from './ProductSearch.module.css';
 
-import Product from '../Product/Product';
+import Product from '../Product -Legacy/Product';
 
 const ProductSearch = props => {
     const products = [

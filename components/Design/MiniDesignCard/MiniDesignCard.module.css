@@ -1,0 +1,28 @@
+.MiniDesignCard {
+    box-sizing: border-box;
+    background-color: white;
+    padding-bottom: 5px;
+}
+
+.Image {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+}
+
+.Title {
+    padding: 5px;
+}
+
+.Buttons {
+    padding: 0 5px;
+    display: flex;
+    font-size: 14px;
+}
+
+.Collection {
+    /* float: right;
+    text-align: right; */
+    margin-left: auto;
+    order: 2;
+}

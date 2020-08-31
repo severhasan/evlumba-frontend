@@ -1,0 +1,42 @@
+.ProductContainer {
+    padding: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* scrollbar-color: #0A4C95 #C2D2E4; */
+    scrollbar-color: #00704a #ffffff;
+    scrollbar-width: thin;
+}
+
+.ProductContainer::-webkit-scrollbar {
+    height: 8px;
+}
+.ProductCardContainer::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+.ProductContainer::-webkit-scrollbar-track-piece {
+    background-color: #ffffff;
+}
+.ProductContainer::-webkit-scrollbar-thumb {
+    /* background-color: #0A4C95; */
+    background-color: #00704a;
+    border-radius: 10px;
+
+}
+
+.ProductCardContainer {
+    min-width: 200px;
+    padding: 0 20px;
+    border-right: 1px solid rgb(226, 226, 226);
+}
+
+.ProductCardContainer:last-of-type {
+    border-right: none;
+}
+
+.NoProducts {
+    text-align: center;
+}

@@ -1,0 +1,34 @@
+.ProductCard {
+    box-sizing: border-box;
+    max-width: 200px;
+    position: relative;
+}
+
+.Buttons {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 5px;
+    width: 100%;
+    padding: 0 10px;
+    font-size: 15px;
+}
+
+.Image {
+    object-fit: contain;
+    width: 100%;
+    height: 80px;
+}
+
+.Detail p {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+.Title {
+    width: 70%;
+}
+.Price {
+    width: 20%;
+    float: right;
+}

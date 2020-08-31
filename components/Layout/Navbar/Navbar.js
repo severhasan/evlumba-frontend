@@ -8,7 +8,7 @@ const Navbar = () => {
         <div className={classes.Navbar}>
             <div className='container'>
                 <div className={classes.Logo}>
-                    <img src='/evlumbaalogo.png' />
+                    <img src='/image/evlumbaalogo.png' />
                 </div>
                 <div className={classes.UserMenu}>
                     <span>Giriş Yap</span>
