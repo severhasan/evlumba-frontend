@@ -7,6 +7,7 @@ import classes from './Create.module.css';
 import { CATEGORIES, SPACES, MAX_IMAGE_SIZE, DEFAULT_SELECT_VALUE } from '../../../helper/constants';
 import { capitalizeEachWord, getNameWithoutExtention } from '../../../helper/functions';
 
+import PopupTop from '../../Popup/Top';
 import ProductSearch from '../ProductSearch/ProductSearch';
 import Tag from '../Tag/Tag';
 
@@ -28,6 +29,8 @@ const CREATEDESIGN = gql`
 `;
 
 const CreateDesign = () => {
+    const [infoContent, setInfoContent] = useState('Fotoğraf yükleniyor...');
+    const [showPopup, setShowPopup] = useState(false);
     const [creating, setCreating] = useState(false);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState("");
@@ -145,11 +148,13 @@ const CreateDesign = () => {
         const response = await axios.put(presignedURL.uploadURL, blobData, { headers: { 'Content-Type': 'image/jpeg', ACL: 'public-read' } });
         if (response.status !== 200) return alert('unable to upload the image');
 
+        setInfoContent('Fotoğraf yüklendi, tasarım kaydı yapılıyor.');
         createDesign({ variables: { design } });
         console.log(await newDesignData);
+        setCreating(false);
     }
 
-    if (URLData && URLData.presignedurl && !presignedURL) {
+    if (URLData && URLData.presignedurl && !presignedURL && !showPopup) {
         setPresignedURL(URLData.presignedurl);
         console.log(URLData.presignedurl)
         setCreating(true);
@@ -159,9 +164,18 @@ const CreateDesign = () => {
         setCreating(false);
     }
 
+    if (newDesignData) {
+        setInfoContent('Tasarım oluşturuldu.');
+    }
+
     const onSubmit = async event => {
         event.preventDefault();
         if (!imageData) return alert('no image set');
+        console.log(getNameWithoutExtention(file.name))
+        setShowPopup(true);
+        getSignedURL({
+            variables: { model: "design", name: encodeURI(getNameWithoutExtention(file.name)) }
+        });
     }
 
     const updateSpace = space => {
@@ -171,6 +185,11 @@ const CreateDesign = () => {
 
     return (
         <div className={classes.Create}>
+            {
+                showPopup ? 
+                <PopupTop header='Yeni Tasarım' content={infoContent}/>
+                :null
+            }
             <div className={classes.Form + " container mt-4"}>
 
                 <h1 className={classes.Title}>Yeni Stil Oluştur</h1>
@@ -213,7 +232,7 @@ const CreateDesign = () => {
                             </div>
                             <aside className={classes.ThumbsContainer}>
                                 {
-                                    products.map((p, idx) => <Tag key={`tag ${idx}`} x={`calc(${p.tagX * 100}% - 25px)`} y={`calc(${p.tagY * 100}% - 20px)`} />)
+                                    products.map((p, idx) => <Tag key={`tag ${idx}`} x={p.tagX} y={p.tagY} />)
                                 }
                                 {thumbs}
                             </aside>
@@ -226,9 +245,7 @@ const CreateDesign = () => {
                     </div>
                     {/* <button id='submitDesign' type="submit" className="btn btn-primary">Gönder</button> */}
                 </form>
-                <button onClick={() => getSignedURL({
-                        variables: { model: 'design', name: getNameWithoutExtention(file.name) }
-                    })} id='submitDesign' type="submit" className="btn btn-primary">
+                <button onClick={onSubmit} id='submitDesign' type="submit" className="btn btn-primary">
                         Gönder
                 </button>
             </div>

@@ -137,17 +137,20 @@ exports.CATEGORIES = {
     ],
 
     
-    "çalişma odası": [
-        "modern çalişma odası",
-        "vintage çalişma odası",
-        "rusti̇k çalişma odası",
-        "retro çalişma odası",
-        "endüstri̇yel çalişma odası",
-        "avangart çalişma odası",
-        "i̇skandi̇nav çalişma odası",
-        "mi̇ni̇mal çalişma odası",
-        "urban çalişma odası",
-        "klasi̇k çalişma odası",
-        "mid-century çalişma odası",
+    "çalışma odası": [
+        "modern çalışma odası",
+        "vintage çalışma odası",
+        "rusti̇k çalışma odası",
+        "retro çalışma odası",
+        "endüstri̇yel çalışma odası",
+        "avangart çalışma odası",
+        "i̇skandi̇nav çalışma odası",
+        "mi̇ni̇mal çalışma odası",
+        "urban çalışma odası",
+        "klasi̇k çalışma odası",
+        "mid-century çalışma odası",
     ]
 }
+
+
+exports.GRAPHQL_URL = 'http://localhost:3000/api/graphql';

@@ -7,11 +7,11 @@ import { createHttpLink } from 'apollo-link-http';
 import Layout from '../containers/Layout/Layout';
 import App from 'next/app';
 import '../public/css/App.css';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { GRAPHQL_URL } from '../helper/constants';
 
 const link = createHttpLink({
-    uri: 'http://localhost:3000/api/graphql'
-    // uri: 'https://48p1r2roz4.sse.codesandbox.io'
+    uri: GRAPHQL_URL
 })
 
 const client = new ApolloClient({
